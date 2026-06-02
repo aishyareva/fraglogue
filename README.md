@@ -57,6 +57,7 @@ xampp/
         ├── assets/
         │   └── css/
         │       └── style.css
+        │   └── img/
         ├── koneksi.php
         ├── login.php
         ├── logout.php
