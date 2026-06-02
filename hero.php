@@ -39,13 +39,6 @@ if (!isset($_SESSION['login'])) {
         .hero-img-vault:hover img {
             transform: scale(1.03);
         }
-        .luxury-badge {
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 4px;
-            color: var(--luxury-gold);
-            text-transform: uppercase;
-        }
         .divider-gold {
             width: 70px;
             height: 2px;
@@ -60,7 +53,6 @@ if (!isset($_SESSION['login'])) {
         <div class="row align-items-center g-5">
             
             <div class="col-lg-6 order-2 order-lg-1">
-                <div class="luxury-badge mb-2">Authenticated Access Logged</div>
                 
                 <h1 class="display-3 fw-bold mb-1" style="color: var(--luxury-text);">
                     The Sanctuary of <span class="text-gold">Scent Chronicles</span>
@@ -69,11 +61,11 @@ if (!isset($_SESSION['login'])) {
                 <div class="divider-gold"></div>
                 
                 <p class="text-muted lh-lg mb-4" style="font-size: 1.05rem; text-align: justify;">
-                    [cite_start]Fraglogue didirikan sebagai sebuah laboratorium kurasi dan arsip penciuman eksklusif (*Luxury Olfactory Archive*) untuk mengabadikan mahakarya wewangian paling berharga di dunia[cite: 24]. Berawal dari sebuah paviliun privat di sudut distrik bersejarah Grasse pada abad ke-20, Fraglogue kini berevolusi menjadi kubah digital modern tempat bertemunya tradisi luhur pembuat parfum (*perfumers*) dengan teknologi preservasi modern.
+                    Fraglogue didirikan sebagai sebuah laboratorium kurasi dan arsip penciuman eksklusif untuk mengabadikan mahakarya wewangian paling berharga di dunia. Berawal dari sebuah paviliun privat di sudut distrik bersejarah Grasse pada abad ke-20, Fraglogue kini berevolusi menjadi kubah digital modern tempat bertemunya tradisi luhur pembuat parfum dengan teknologi preservasi modern.
                 </p>
                 
                 <p class="text-muted lh-lg mb-5" style="font-size: 1.05rem; text-align: justify;">
-                    Di balik dinding galeri arsitektur kontemporer kami, setiap tetes esensi, transisi piramida aroma, dan catatan sejarah dari ramuan legendaris dikategorikan secara presisi. Selamat datang kembali, <strong><?= htmlspecialchars($_SESSION['username']); [cite_start]?></strong>[cite: 25]. Masuklah lebih dalam, dan temukan mahakarya aroma berikutnya yang akan mendefinisikan persona agung Anda.
+                    Di balik dinding galeri arsitektur kontemporer kami, setiap tetes esensi, transisi piramida aroma, dan catatan sejarah dari ramuan legendaris dikategorikan secara presisi. Selamat datang kembali, <strong><?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'; ?></strong>. Masuklah lebih dalam, dan temukan mahakarya aroma berikutnya yang akan mendefinisikan persona agung Anda.
                 </p>
                 
                 <div>
@@ -85,7 +77,7 @@ if (!isset($_SESSION['login'])) {
             
             <div class="col-lg-6 order-1 order-lg-2">
                 <div class="hero-img-vault perfume-card p-2 bg-white">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" 
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80" 
                          alt="Fraglogue Contemporary Olfactory Vault Architecture">
                 </div>
             </div>
