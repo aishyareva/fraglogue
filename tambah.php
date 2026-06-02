@@ -10,8 +10,34 @@ if (isset($_POST['submit'])) {
     $id_category = mysqli_real_escape_string($koneksi, $_POST['id_category']);
     $price = mysqli_real_escape_string($koneksi, $_POST['price']);
     $main_notes = mysqli_real_escape_string($koneksi, $_POST['main_notes']);
-    $image_url = mysqli_real_escape_string($koneksi, $_POST['image_url']);
     $description = mysqli_real_escape_string($koneksi, $_POST['description']);
+
+    $image_url = '';
+    
+    if (isset($_FILES['image_file']) && $_FILES['image_file']['error'] === UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES['image_file']['tmp_name'];
+        $file_name = $_FILES['image_file']['name'];
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        
+        $allowed_ext = ['jpg', 'jpeg', 'png'];
+        if (in_array($file_ext, $allowed_ext)) {
+            $new_file_name = uniqid('frag_') . '.' . $file_ext;
+            $target_dir = "assets/img/";
+            
+            if (!is_dir($target_dir)) { mkdir($target_dir, 0777, true); }
+            
+            $image_url = $target_dir . $new_file_name;
+            move_uploaded_file($file_tmp, $image_url);
+        } else {
+            echo "<script>alert('Hanya file JPG/PNG yang diperbolehkan!'); window.history.back();</script>";
+            exit;
+        }
+    } elseif (!empty($_POST['image_url_link'])) {
+        $image_url = mysqli_real_escape_string($koneksi, $_POST['image_url_link']);
+    } else {
+        echo "<script>alert('Harap unggah gambar atau masukkan link URL!'); window.history.back();</script>";
+        exit;
+    }
 
     $insert = "INSERT INTO perfumes (fragella_id, name, brand, id_category, price, main_notes, image_url, description) 
                VALUES ('$fragella_id', '$name', '$brand', '$id_category', '$price', '$main_notes', '$image_url', '$description')";
@@ -35,7 +61,7 @@ if (isset($_POST['submit'])) {
     <div class="container my-5" style="max-width: 700px;">
         <div class="perfume-card p-4 p-md-5">
             <h2 class="text-gold text-center mb-4 font-serif">Catalogue New Fragrance</h2>
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label text-muted small">Fragella API Reference ID</label>
@@ -66,10 +92,26 @@ if (isset($_POST['submit'])) {
                         <label class="form-label text-muted small">Main Aromas / Notes</label>
                         <input type="text" name="main_notes" class="form-control bg-dark text-white border-secondary" placeholder="e.g. Oud, Leather, Raspberry" required>
                     </div>
-                    <div class="col-md-12">
-                        <label class="form-label text-muted small">Image URL Location</label>
-                        <input type="url" name="image_url" class="form-control bg-dark text-white border-secondary" placeholder="https://example.com/image.jpg" required>
+                    
+                    <div class="col-md-12 mt-4">
+                        <div class="p-3 border border-secondary rounded bg-dark">
+                            <label class="form-label text-gold fw-bold small mb-3">Product Image Representation</label>
+                            
+                            <div class="mb-3">
+                                <label class="form-label text-muted small">Option A: Upload Local Image (JPG/PNG)</label>
+                                <input type="file" name="image_file" class="form-control bg-dark text-white border-secondary" accept=".jpg,.jpeg,.png">
+                            </div>
+                            
+                            <div class="text-center text-muted small mb-3 fw-bold">--- OR ---</div>
+                            
+                            <div>
+                                <label class="form-label text-muted small">Option B: External Image URL Link</label>
+                                <input type="url" name="image_url_link" class="form-control bg-dark text-white border-secondary" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <small class="text-secondary d-block mt-2" style="font-size: 0.7rem;">* Jika keduanya diisi, sistem akan memprioritaskan opsi Upload Local Image.</small>
+                        </div>
                     </div>
+
                     <div class="col-md-12">
                         <label class="form-label text-muted small">Detailed Composition Summary</label>
                         <textarea name="description" rows="4" class="form-control bg-dark text-white border-secondary" required></textarea>
