@@ -44,18 +44,17 @@ $query = mysqli_query($koneksi, $query_str);
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-    <li class="nav-item"><a class="nav-link px-3 fw-medium" href="index.php">Archive</a></li>
-    <li class="nav-item"><a class="nav-link px-3 fw-medium" href="favorit.php">My Favorites</a></li>
-    
-    <li class="nav-item"><a class="nav-link px-3 fw-medium text-dark" href="keranjang.php">My Cart</a></li>
-    
-    <?php if ($_SESSION['role'] === 'admin'): ?>
-        <li class="nav-item"><a class="nav-link px-3 fw-bold text-gold" href="dashboard_admin.php">Admin Dashboard</a></li>
-    <?php endif; ?>
-    
-    <li class="nav-item text-muted px-3 small">Hi, <strong><?= htmlspecialchars($_SESSION['username']); ?></strong></li>
-    <li class="nav-item"><a class="btn btn-sm btn-outline-gold ms-2" href="logout.php">Logout</a></li>
-</ul>
+                    <li class="nav-item"><a class="nav-link px-3 fw-medium" href="index.php">Archive</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-medium" href="favorit.php">My Favorites</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-medium text-dark" href="keranjang.php">My Cart</a></li>
+                    
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <li class="nav-item"><a class="nav-link px-3 fw-bold text-gold" href="dashboard_admin.php">Admin Dashboard</a></li>
+                    <?php endif; ?>
+                    
+                    <li class="nav-item text-muted px-3 small">Hi, <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong></li>
+                    <li class="nav-item"><a class="btn btn-sm btn-outline-gold ms-2" href="logout.php">Logout</a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -66,27 +65,27 @@ $query = mysqli_query($koneksi, $query_str);
         
         <form action="" method="GET" class="mx-auto" style="max-width: 650px;">
             <div class="input-group shadow-sm mb-3">
-                <input type="text" name="search" class="form-control py-2" placeholder="Search brands, names, or notes..." value="<?= htmlspecialchars($search); ?>">
+                <input type="text" name="search" class="form-control py-2" placeholder="Search brands, names, or notes..." value="<?php echo htmlspecialchars($search); ?>">
                 <button class="btn btn-gold px-4" type="submit">Search</button>
             </div>
             
             <div class="d-flex align-items-center justify-content-center gap-2 bg-white p-2 rounded border border-light shadow-sm">
                 <span class="small text-muted fw-medium me-2">Filter Category:</span>
-                <a href="index.php?search=<?= urlencode($search); ?>" class="btn btn-sm <?= $category_filter == '' ? 'btn-gold' : 'btn-outline-gold' ?> py-1 px-3 rounded-pill small">All Scents</a>
+                <a href="index.php?search=<?php echo urlencode($search); ?>" class="btn btn-sm <?php echo $category_filter == '' ? 'btn-gold' : 'btn-outline-gold'; ?> py-1 px-3 rounded-pill small">All Scents</a>
                 
                 <?php 
                 $cat_query = mysqli_query($koneksi, "SELECT * FROM categories");
                 while($cat = mysqli_fetch_array($cat_query)):
                 ?>
-                    <a href="index.php?search=<?= urlencode($search); ?>&category=<?= $cat['id_category']; ?>" 
-                       class="btn btn-sm <?= $category_filter == $cat['id_category'] ? 'btn-gold' : 'btn-outline-gold' ?> py-1 px-3 rounded-pill small">
-                        <?= $cat['category_name']; ?>
+                    <a href="index.php?search=<?php echo urlencode($search); ?>&category=<?php echo $cat['id_category']; ?>" 
+                       class="btn btn-sm <?php echo $category_filter == $cat['id_category'] ? 'btn-gold' : 'btn-outline-gold'; ?> py-1 px-3 rounded-pill small">
+                        <?php echo $cat['category_name']; ?>
                     </a>
                 <?php endwhile; ?>
             </div>
         </form>
 
-        <?php if ($_SESSION['role'] === 'admin'): ?>
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
             <div class="text-end mt-4">
                 <a href="tambah.php" class="btn btn-gold px-4 shadow-sm">+ Add New Masterpiece</a>
             </div>
@@ -104,21 +103,21 @@ $query = mysqli_query($koneksi, $query_str);
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="perfume-card h-100 d-flex flex-column">
                             <div class="perfume-img-container">
-                                <img src="<?= $data['image_url']; ?>" class="perfume-img" alt="<?= htmlspecialchars($data['name']); ?>">
+                                <img src="<?php echo $data['image_url']; ?>" class="perfume-img" alt="<?php echo htmlspecialchars($data['name']); ?>">
                             </div>
                             <div class="p-3 d-flex flex-column flex-grow-1">
-                                <span class="text-gold small text-uppercase tracking-wider fw-semibold"><?= htmlspecialchars($data['brand']); ?></span>
+                                <span class="text-gold small text-uppercase tracking-wider fw-semibold"><?php echo htmlspecialchars($data['brand']); ?></span>
                                 <h3 class="h6 my-1 fw-bold text-dark"><?= htmlspecialchars($data['name']); ?></h3>
-                                <p class="text-muted small mb-2" style="font-size: 0.8rem;"><em>Category: <?= htmlspecialchars($data['category_name']); ?></em></p>
-                                <p class="text-gold fw-bold mb-3">IDR <?= number_format($data['price'], 0, ',', '.'); ?></p>
+                                <p class="text-muted small mb-2" style="font-size: 0.8rem;"><em>Category: <?php echo htmlspecialchars($data['category_name']); ?></em></p>
+                                <p class="text-gold fw-bold mb-3">IDR <?php echo number_format($data['price'], 0, ',', '.'); ?></p>
                                 
                                 <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top border-light">
-                                    <a href="detail.php?id=<?= $data['id_perfume']; ?>" class="btn btn-sm btn-outline-gold px-3">Details</a>
+                                    <a href="detail.php?id=<?php echo $data['id_perfume']; ?>" class="btn btn-sm btn-outline-gold px-3">Details</a>
                                     
-                                    <?php if ($_SESSION['role'] === 'admin'): ?>
+                                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                                         <div>
-                                            <a href="edit.php?id=<?= $data['id_perfume']; ?>" class="text-warning me-2 text-decoration-none small fw-medium">Edit</a>
-                                            <a href="hapus.php?id=<?= $data['id_perfume']; ?>" class="text-danger text-decoration-none small fw-medium" onclick="return confirm('Archive data ini?')">Delete</a>
+                                            <a href="edit.php?id=<?php echo $data['id_perfume']; ?>" class="text-warning me-2 text-decoration-none small fw-medium">Edit</a>
+                                            <a href="hapus.php?id=<?php echo $data['id_perfume']; ?>" class="text-danger text-decoration-none small fw-medium" onclick="return confirm('Archive data ini?')">Delete</a>
                                         </div>
                                     <?php endif; ?>
                                 </div>
